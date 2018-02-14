@@ -1,0 +1,84 @@
+.reaction h1 {
+  font-size: 5vw;
+  color: #86B2B3;
+  text-align: center;
+  font-weight: 700;
+}
+
+.reaction h2 {
+  font-size: 1.5vw;
+  color: #9CC2BF;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.reaction header {
+  height: 15%;
+}
+
+.reactionTest {
+  height: 80%;
+}
+
+.reactionInstructions {
+  color: #B0BCB8;
+  text-align: center;
+}
+
+.reaction .centerdContainer {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.arrowContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 39%;
+}
+
+.startTestBtn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-decoration: none;
+  color: #F9F6F2;
+  background-color: #86B2B3;
+  width: 10vw;
+  height: 6vw;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 1vw;
+  line-height: 3vw;
+  font-size: 1.3vw;
+  border-radius: 15px;
+  border-color: #86B2B3;
+  border-style: solid;
+  border-width: 0.5vw;
+}
+
+.startTestBtn:hover {
+  background-color: #7ba4a4;
+}
+
+.reaction .arrow {
+  display: block;
+  color: #86B2B3;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reaction .results {
+  margin-top: 5px;
+  text-align: center;
+  color: #B0BCB8;
+}
+
+.hitSpace {
+  color: #86B2B3;
+  font-size: 4vw;
+  text-align: center;
+  font-weight: bold;
+}
