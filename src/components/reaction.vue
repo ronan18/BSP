@@ -3,6 +3,7 @@
   <header>
     <h1>Reaction Time Test</h1>
     <h2>a test of your reaction time (woah)</h2>
+    <p class="reactionInstructions">Place your hand on your space key. When "Hit Space" pops up hit space.</p>
   </header>
   <section class="reactionTest">
     <div class="centerdContainer">
@@ -24,11 +25,7 @@
 
     </div>
   </section>
-  <section class="reactionInstructions">
 
-    <p>Place your hand on your space key. When "Hit Space" pops up hit space.</p>
-
-  </section>
 
 </div>
 </template>
@@ -69,19 +66,25 @@ export default {
       uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
       // this value to authenticate with your backend server, if
       // you have one. Use User.getToken() instead.
+      firebase.database().ref('data/' + uid + '/info').set({
+        name: name,
+        email: email,
+        uid: uid
+      })
+      firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
+        if (snapshot.hasChild('reactionTime')) {
+          if (!snapshot.hasChild('typingSpeed')) {
+            this.$router.push('/typing')
+          } else {
+            this.$router.push('/thankyou')
+          }
+        }
+      })
     } else {
       this.$router.push('/')
     }
-    firebase.database().ref('data/' + uid + '/info').set({
-      name: name,
-      email: email,
-      uid: uid
-    });
-    firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
-      if (snapshot.hasChild('reactionTime')) {
-        this.$router.push('/thankyou')
-      }
-    });
+
+
 
   },
   methods: {

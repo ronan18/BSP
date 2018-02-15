@@ -3,6 +3,7 @@
   <header>
     <h1>Typing Test</h1>
     <h2>a test to calculate your WPM (shocker)</h2>
+    <p class="typingInstructions">Type as fast as possible with as little mistakes as possible. <b>Hit ENTER</b> Once your done</p>
   </header>
   <section class="typingTest">
     <div class="centerdContainer">
@@ -15,16 +16,12 @@
         </div>
         <input v-if="testText" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false" autocomplete="off" v-model="userText" id="typingInput" @keyup.enter="submit" @keyup="startTimer" autofocus type="text" name="text" value=""
           placeholder="Copy the above results">
+        <button @click="submit" v-if="testText" class="startTestBtn" type="button" name="submit">Submit!</button>
         <p class="typeingResults" v-if="results"><b>{{round(wpm)}}</b> wpm with <b>{{errorCount}}</b> error(s)</p>
-        <button @click="next" class="startTestBtn">Next!</button>
+        <button v-if="results" @click="next" class="startTestBtn">Next!</button>
       </div>
 
     </div>
-  </section>
-  <section class="typingInstructions">
-
-    <p>Type as fast as possible with as little mistakes as possible.</p>
-
   </section>
 
 </div>
@@ -53,7 +50,6 @@ export default {
     results: false,
     scentences: [
       'Once a long long time ago there was a child. This child really liked cheese but he was not able to eat his cheese because Google Docs was taking forever to load. Then he used Graphite Writer (A very un-shrimpy text editor) which loaded much faster, allowing him to eat as much cheese as he wanted.',
-      'Announcing brand new Graphite Writer t-shirts, ties, and sweatshirts!! You can buy t-shirts for $12.95 ties for $19 and sweatshirts for $21. You can buy any of these un-shrimpy items from either Ronan or Sasha. A long time ago, there was a great person named Red Fred who lived in a shed.',
       'Once there was a person named Red Fred. Red Fred was no shrimpy person, he was an orienteering god. He won the international orienteering contest at least 50 times. He could orienteer his way out of almost any situation. But he was missing something from his life, a Graphite Writer t-shirt.'
     ]
   }),
@@ -70,24 +66,27 @@ export default {
       uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
       // this value to authenticate with your backend server, if
       // you have one. Use User.getToken() instead.
+      firebase.database().ref('data/' + uid + '/info').set({
+        name: name,
+        email: email,
+        uid: uid
+      });
+      firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
+        if (!snapshot.hasChild('reactionTime')) {
+          this.$router.push('/reaction')
+        }
+        if (snapshot.hasChild('typingSpeed')) {
+          if (!snapshot.hasChild('reactionTime')) {
+            this.$router.push('/reaction')
+          } else {
+            this.$router.push('/thankyou')
+          }
+        }
+      })
     } else {
       this.$router.push('/')
     }
-    firebase.database().ref('data/' + uid + '/info').set({
-      name: name,
-      email: email,
-      uid: uid
-    });
-    firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
-      if (!snapshot.hasChild('reactionTime')) {
-        this.$router.push('/reaction')
-      }
-    });
-    firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
-      if (snapshot.hasChild('typingSpeed')) {
-        this.$router.push('/thankyou')
-      }
-    });
+
 
 
   },
