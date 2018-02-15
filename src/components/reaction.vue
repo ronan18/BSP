@@ -7,16 +7,17 @@
   <section class="reactionTest">
     <div class="centerdContainer">
       <div class="arrowContainer">
+        <p v-if="info" class="info">Place your hand above the space key</p>
         <p v-if="key" class="hitSpace">Hit Space!!</p>
       </div>
       <div v-if="!testing">
         <button @click="startTest" class="startTestBtn">{{startTestText}}</button>
-        <p class="results" v-if="tryAgain">Try {{tries}} out of 5 average {{average}}s</p>
+        <p class="results" v-if="tryAgain">Try {{tries}} out of 5 average {{average}}ms</p>
 
       </div>
       <div v-if="next">
         <button @click="goNext" class="startTestBtn">Next</button>
-        <p class="results" v-if="done">Try {{tries}} out of 5 average {{average}}s</p>
+        <p class="results" v-if="done">Out of 5 tries your average was {{average}}ms</p>
 
       </div>
 
@@ -52,7 +53,8 @@ export default {
     startTestText: 'Start Test!',
     tryAgain: false,
     next: false,
-    done: false
+    done: false,
+    info: false
   }),
   created() {
     //do something after creating vue
@@ -67,12 +69,12 @@ export default {
       uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
       // this value to authenticate with your backend server, if
       // you have one. Use User.getToken() instead.
+    } else {
+      this.$router.push('/')
     }
-    firebase.database().ref('data/' + uid + '/reactionTime').once('value').then((snapshot) => {
-      console.log(snapshot.val().average);
-      if (snapshot.val().average) {
-
-        this.$router.push('typing')
+    firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
+      if (snapshot.hasChild('reactionTime')) {
+        this.$router.push('/thankyou')
       }
     });
 
@@ -83,9 +85,20 @@ export default {
 
     },
     startTest() {
+      var keys = {};
+      window.onkeyup = function(e) {
+        keys[e.keyCode] = false;
+      }
+      window.onkeydown = function(e) {
+        keys[e.keyCode] = true;
+      }
       this.testing = true;
+      this.info = true
       setTimeout(() => {
-        let createdTime = Date.now();
+        this.info = false
+      }, 1000)
+      setTimeout(() => {
+        let createdTime = +new Date();
         this.key = true
         document.onkeydown = (e) => {
 
@@ -94,8 +107,8 @@ export default {
           if (e.keyCode == '32') {
             console.log('space');
             this.key = false
-            let clickedTime = Date.now();
-            this.result = (clickedTime - createdTime) / 1000;
+            let clickedTime = +new Date();
+            this.result = (clickedTime - createdTime);
             this.tries++;
             this.results.push(this.result)
             this.total = this.total + this.result
@@ -133,7 +146,7 @@ export default {
 
         }
 
-      }, randomIntFromInterval(1000, 2000));
+      }, randomIntFromInterval(2000, 3000));
     }
   }
 

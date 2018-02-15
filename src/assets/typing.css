@@ -55,3 +55,10 @@
   background-color: #F9F6F2;
   color: #86B2B3;
 }
+
+.typeingResults {
+  text-align: center;
+  color: #86B2B3;
+  font-size: 3vw;
+  font-weight: 300;
+}

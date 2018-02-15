@@ -13,6 +13,14 @@
   margin-top: 2px;
 }
 
+.info {
+  margin-top: 5px;
+  text-align: center;
+  color: #B0BCB8;
+  font-size: 3vw !important;
+  font-weight: light;
+}
+
 .reaction header {
   height: 15%;
 }
