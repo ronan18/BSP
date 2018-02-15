@@ -72,6 +72,11 @@ export default {
     } else {
       this.$router.push('/')
     }
+    firebase.database().ref('data/' + uid + '/info').set({
+      name: name,
+      email: email,
+      uid: uid
+    });
     firebase.database().ref('data/' + uid).once('value').then((snapshot) => {
       if (snapshot.hasChild('reactionTime')) {
         this.$router.push('/thankyou')
